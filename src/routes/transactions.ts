@@ -5,8 +5,6 @@ import { knex } from '../database'
 
 export async function transactionsRoutes(app: FastifyInstance) {
   app.post('/', async (request, reply) => {
-    // { title, amount, type: credit ou debit }
-
     const createTransactionBodySchema = z.object({
       title: z.string(),
       amount: z.number(),
