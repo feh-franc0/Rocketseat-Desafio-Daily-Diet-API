@@ -1,5 +1,12 @@
-import 'dotenv/config'
+import { config } from 'dotenv'
 import { z } from 'zod'
+
+// o process.env.NODE_ENV quando se usa uma ferramenta de teste, como o vitest, recebe automaticamente um valor test a essa variavel de ambiente
+if (process.env.NODE_ENV === 'test') {
+  config({ path: '.env.test' })
+} else {
+  config()
+}
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('production'),
@@ -7,10 +14,6 @@ const envSchema = z.object({
   PORT: z.number().default(3333),
 })
 
-//* .parse faz uma validação e dispara um erro caso tenha inconsistência nas variáveis de ambiente
-// export const env = envSchema.parse(process.env)
-
-//* .safeParse faz uma validação e ão dispara um erro caso tenha inconsistência nas variáveis de ambiente
 const _env = envSchema.safeParse(process.env)
 
 if (_env.success === false) {
