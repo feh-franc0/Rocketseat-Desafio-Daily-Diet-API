@@ -142,4 +142,36 @@ describe('Meals routes', () => {
       .set('Cookie', cookies)
       .expect(204)
   })
+
+  it.only('should be able to get metrics about meals', async () => {
+    await request(app.server).post('/meals').send({
+      name: 'Meal 1',
+      description: 'Description 1',
+      dietFood: true,
+    })
+
+    await request(app.server).post('/meals').send({
+      name: 'Meal 2',
+      description: 'Description 2',
+      dietFood: true,
+    })
+
+    const createMealResponse = await request(app.server).post('/meals').send({
+      name: 'Meal 3',
+      description: 'Description 3',
+      dietFood: false,
+    })
+
+    const cookies = createMealResponse.get('Set-Cookie')
+
+    const response = await request(app.server)
+      .get('/meals/metrics')
+      .set('Cookie', cookies)
+      .expect(200)
+
+    expect(response.body.totalCount).toBe(3)
+    expect(response.body.dietCount).toBe(2)
+    expect(response.body.nonDietCount).toBe(1)
+    // Add assertions for bestDietSequence
+  })
 })
