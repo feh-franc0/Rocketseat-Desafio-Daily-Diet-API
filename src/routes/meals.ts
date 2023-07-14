@@ -131,4 +131,40 @@ export async function mealsRoutes(app: FastifyInstance) {
       return reply.status(204).send()
     },
   )
+
+  app.get('/metrics', async (request, reply) => {
+    const meals = await knex('meals').orderBy('created_at')
+    const totalCount: number = meals.length
+    const dietCount: number = meals.filter((meal) => meal.dietFood).length
+    const nonDietCount: number = meals.filter((meal) => !meal.dietFood).length
+
+    let maxDietSequence: number = 0
+    let currentDietSequence: number = 0
+    let prevMealIsDiet: boolean | null = null
+
+    for (const meal of meals) {
+      if (meal.dietFood) {
+        if (prevMealIsDiet === true) {
+          currentDietSequence++
+        } else {
+          currentDietSequence = 1
+        }
+        prevMealIsDiet = true
+      } else {
+        prevMealIsDiet = false
+        currentDietSequence = 0
+      }
+
+      if (currentDietSequence > maxDietSequence) {
+        maxDietSequence = currentDietSequence
+      }
+    }
+
+    return {
+      totalCount,
+      dietCount,
+      nonDietCount,
+      bestDietSequence: maxDietSequence,
+    }
+  })
 }

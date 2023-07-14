@@ -2,7 +2,7 @@
 
 - [x] O usuário deve poder registrar uma refeição
 - [x] O usuário deve poder manipular suas refeições
-- [ ] O usuário deve ter acesso as suas métricas
+- [x] O usuário deve ter acesso as suas métricas
 
 # RN - Regra de negócios
 
@@ -21,7 +21,7 @@
 - [x] Deve ser possível apagar uma refeição
 - [x] Deve ser possível listar todas as refeições de um usuário
 - [x] Deve ser possível visualizar uma única refeição
-- [ ] Deve ser possível recuperar as métricas de um usuário
+- [x] Deve ser possível recuperar as métricas de um usuário
     ```node
       {
         Quantidade total de refeições registradas,
